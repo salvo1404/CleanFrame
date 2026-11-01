@@ -24,7 +24,7 @@ Brand marks identify services. Their owners retain trademark rights; this projec
 
 ## Art slideshow and nature wallpaper images
 
-The paintings in `app/assets/art/` are public-domain works reproduced from Wikimedia Commons (`app/assets/art/SOURCES.json`). The Australian nature wallpapers are used under their Creative Commons licences (CC BY 2.0, CC BY 3.0, CC BY-SA 3.0, CC BY-SA 4.0) or CC0, as recorded per image with its creator, licence and source page in `app/assets/wallpapers/SOURCES.json` (entries marked `nature`). Each photograph was resized and centre-cropped, and its thumbnail, panel and material fields are derived from it; adapted CC BY-SA images remain under their CC BY-SA licence. Licence texts: https://creativecommons.org/licenses/.
+The paintings in `app/assets/art/` are public-domain works reproduced from Wikimedia Commons (`app/assets/art/SOURCES.json`). The Australian nature wallpapers are used under their Creative Commons licences (CC BY 3.0, CC BY-SA 3.0, CC BY-SA 4.0), as recorded per image with its creator, licence and source page in `app/assets/wallpapers/SOURCES.json` (entries marked `nature`). Each photograph was resized and centre-cropped, and its thumbnail, panel and material fields are derived from it; adapted CC BY-SA images remain under their CC BY-SA licence. Licence texts: https://creativecommons.org/licenses/.
 
 ## Photographs and derived materials
 

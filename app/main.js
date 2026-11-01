@@ -28,12 +28,13 @@
   var WALLS = window.CleanFrameWallpapers || [{ id: 'misty', name: 'Misty coast', tone: 'light', ut: { tr: 'mist', br: 'mist' }, frostVeil: .20 }];
   var ADAPTIVE_INK = window.CleanFrameAdaptiveInk || {};
   WALLS.forEach(function (w) { w.ut = w.ut || { tr: 'light', br: 'light' }; w.frostVeil = w.frostVeil || .12; });
-  // Nature photos change only on Home open or Shuffle; timed rotation keeps to the original gallery.
-  var NATURE = WALLS.filter(function (w) { return w.nature; }), CLASSIC = WALLS.filter(function (w) { return !w.nature; });
+  var EXTRA_MARKS = ['hbomax', 'spotify', 'tubi', 'smartiptv'];
+  // Nature photos change only by choice or Shuffle; automatic rotation keeps to the original gallery.
+  var CLASSIC = WALLS.filter(function (w) { return !w.nature; });
   if (!CLASSIC.length) CLASSIC = WALLS;
   function nextIn(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[(i + 1) % list.length]; return list[0]; }
   var MODES = [
-    { id: 'fixed', name: 'Fixed', min: 0 }, { id: 'nature', name: 'Nature', min: 0 }, { id: 'open', name: 'Each time Home opens', min: 0 },
+    { id: 'fixed', name: 'Fixed', min: 0 }, { id: 'open', name: 'Each time Home opens', min: 0 },
     { id: '5', name: 'Every 5 minutes', min: 5 }, { id: '15', name: 'Every 15 minutes', min: 15 },
     { id: '60', name: 'Every hour', min: 60 }
   ];
@@ -335,8 +336,10 @@
     var s = saved && typeof saved === 'object' ? saved : {}, modern = s.look && typeof s.look === 'object' ? s.look : s;
     var legacyList = s.theme === 'list', h = [], recent = [], records = Array.isArray(s.appRecords) ? s.appRecords : [];
     records.slice(0, 256).forEach(function (a) {
+      var brand;
       if (!a || !safeId(a.id) || !safeId(a.appId) || typeof a.name !== 'string' || !a.name.trim() || app(a.id)) return;
-      APPS.push({ id: a.id, appId: a.appId, name: a.name.slice(0, 160), brand: ['hbomax', 'spotify', 'tubi'].indexOf(a.brand) >= 0 ? a.brand : '', mark: ['hbomax', 'spotify', 'tubi'].indexOf(a.brand) >= 0, icon: safeIcon(a.icon) });
+      brand = EXTRA_MARKS.indexOf(a.brand) >= 0 ? a.brand : FrameDevice.brandOf(a.appId);
+      APPS.push({ id: a.id, appId: a.appId, name: a.name.slice(0, 160), brand: brand, mark: !!brand, icon: safeIcon(a.icon) });
     });
     (Array.isArray(s.home) ? s.home : Array.isArray(s.dock) ? s.dock : []).forEach(function (id) {
       if (!safeId(id) || h.indexOf(id) >= 0 || h.length >= CAP) return;
@@ -371,7 +374,6 @@
     S.stack = [{ id: 'home', f: { zone: 'apps', u: 0 } }];
     S.sel = S.c.lastApp; S.selIdx = S.c.home.indexOf(S.sel);
     if (saved && initial.mode === 'open') initial.wall = nextIn(CLASSIC, initial.wall).id;
-    if (saved && initial.mode === 'nature' && NATURE.length) initial.wall = nextIn(NATURE, initial.wall).id;
     // Keep the old schema keys alongside the builder values for in-place updates.
     try { localStorage.setItem(KEY, JSON.stringify(serialise(initial))); S.c = initial; storageOk = true; } catch (e) { storageOk = false; }
   }
@@ -497,7 +499,7 @@
   }
 
   /* ---------- Navigation targets ---------- */
-  function utils() { return NATURE.length ? ['shuffle', 'art', 'apps', 'settings'] : ['art', 'apps', 'settings']; }
+  function utils() { return WALLS.length > 1 ? ['shuffle', 'art', 'apps', 'settings'] : ['art', 'apps', 'settings']; }
   /* prev/next run along the apps; out goes to the controls, inn comes back (or to a per-app action). */
   function axes() {
     var v = S.c.layout === 'list';
@@ -509,12 +511,31 @@
     else if (u === 'apps') openApps();
     else openSettings();
   }
-  // Shuffle shows a different nature photo and keeps Nature rotation on.
+  /* Shuffle deals from a saved random order of the whole gallery, so every wallpaper
+     appears once before any repeats. A new order never starts with the photo on screen. */
+  var SHUFFLE_KEY = 'cleanframe.shuffle.v1';
+  function shuffledIds(avoid) {
+    var ids = WALLS.map(function (w) { return w.id; }), i, j, x;
+    for (i = ids.length - 1; i > 0; i--) { j = Math.floor(Math.random() * (i + 1)); x = ids[i]; ids[i] = ids[j]; ids[j] = x; }
+    if (ids.length > 1 && ids[0] === avoid) { x = ids[0]; ids[0] = ids[1]; ids[1] = x; }
+    return ids;
+  }
+  function loadDeck() {
+    var d = null;
+    try { d = JSON.parse(localStorage.getItem(SHUFFLE_KEY)); } catch (e) { d = null; }
+    // A changed gallery (added or removed photos) starts a fresh order.
+    if (!d || !Array.isArray(d.order) || typeof d.i !== 'number' || d.order.length !== WALLS.length || !d.order.every(function (id) { return !!wall(id); })) return { order: [], i: 0 };
+    return d;
+  }
   function shuffleWall() {
-    var pool = NATURE.filter(function (w) { return w.id !== S.c.wall; }), w = pool[Math.floor(Math.random() * pool.length)], c;
-    if (!w) return;
-    if (S.c.mode !== 'nature') { c = next(S.c.home.slice(), S.c.recent.slice()); c.mode = 'nature'; if (!write(c, 'Wallpaper rotation')) return; }
-    setLook({ bg: 'photo', wall: w.id }, { row: 'bg' });
+    var deck = loadDeck(), id = S.c.wall, guard = 0;
+    if (WALLS.length < 2) return;
+    while (id === S.c.wall && guard++ <= WALLS.length) {
+      if (deck.i >= deck.order.length) deck = { order: shuffledIds(S.c.wall), i: 0 };
+      id = deck.order[deck.i++];
+    }
+    try { localStorage.setItem(SHUFFLE_KEY, JSON.stringify(deck)); } catch (e) { /* Shuffle still works for this session without a saved order. */ }
+    setLook({ bg: 'photo', wall: id }, { row: 'bg' });
   }
   function addAppsRoute() { openEditor('home'); }
   function openSettings() { push({ id: 'settings', f: { id: S.settingsFocus } }); }
@@ -1145,8 +1166,9 @@
 
   function renderWallCaption() {
     var w = S.c.bg === 'photo' && S.shown && S.shown.bg === 'photo' ? wall(S.shown.wall) : null;
-    setHTML(wallCaption, w && w.nature ? '<span class="wc-place">' + esc(w.name) + ' · ' + esc(w.place) + '</span>' + (w.credit ? '<span class="wc-credit">' + esc(w.credit) + '</span>' : '') : '');
-    wallCaption.className = 'wall-caption' + (w && w.nature ? ' is-on' : '');
+    var on = !!(w && w.place);
+    setHTML(wallCaption, on ? '<span class="wc-place">' + esc(w.name) + ' · ' + esc(w.place) + '</span>' : '');
+    wallCaption.className = 'wall-caption' + (on ? ' is-on' : '');
   }
   function clockText() {
     var d = new Date(), h = d.getHours() % 12 || 12, m = d.getMinutes();

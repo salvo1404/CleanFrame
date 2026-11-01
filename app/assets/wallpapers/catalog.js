@@ -13,7 +13,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.2,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": false
+    "clockMist": false,
+    "place": "Big Sur, California, USA"
   },
   {
     "id": "cove",
@@ -28,7 +29,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.12,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": true
+    "clockMist": true,
+    "place": "Big Sur, California, USA"
   },
   {
     "id": "forest",
@@ -43,7 +45,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.12,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": true
+    "clockMist": true,
+    "place": "Zlatar Lake, Serbia"
   },
   {
     "id": "valley",
@@ -58,7 +61,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.12,
     "listColumn": 3,
     "dockQuiet": false,
-    "clockMist": false
+    "clockMist": false,
+    "place": "Tunnel View, Yosemite, USA"
   },
   {
     "id": "night",
@@ -73,7 +77,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.2,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": false
+    "clockMist": false,
+    "place": "Mashhad, Iran"
   },
   {
     "id": "peaks",
@@ -90,7 +95,8 @@ window.CleanFrameWallpapers = [
     "dockQuiet": true,
     "clockMist": false,
     "clockInk": "#3a586e",
-    "dockClockInk": "#324f65"
+    "dockClockInk": "#324f65",
+    "place": "Swiss Alps, Switzerland"
   },
   {
     "id": "bridge",
@@ -105,7 +111,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.44,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": false
+    "clockMist": false,
+    "place": "Golden Gate Bridge, San Francisco"
   },
   {
     "id": "ridge",
@@ -120,7 +127,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.12,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": true
+    "clockMist": true,
+    "place": "Monte Altissimo di Nago, Italy"
   },
   {
     "id": "golden",
@@ -135,7 +143,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.3,
     "listColumn": 2,
     "dockQuiet": true,
-    "clockMist": true
+    "clockMist": true,
+    "place": "Big Sur, California, USA"
   },
   {
     "id": "summit",
@@ -150,7 +159,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.2,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": false
+    "clockMist": false,
+    "place": "Kumaon Himalayas, India"
   },
   {
     "id": "goldcoast",
@@ -165,7 +175,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.2,
     "listColumn": 3,
     "dockQuiet": false,
-    "clockMist": false
+    "clockMist": false,
+    "place": "Surfers Paradise, QLD"
   },
   {
     "id": "sydney",
@@ -180,7 +191,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.44,
     "listColumn": 3,
     "dockQuiet": false,
-    "clockMist": true
+    "clockMist": true,
+    "place": "Sydney Harbour, NSW"
   },
   {
     "id": "amber",
@@ -195,7 +207,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.2,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": false
+    "clockMist": false,
+    "place": "Volterra, Italy"
   },
   {
     "id": "mint",
@@ -225,7 +238,8 @@ window.CleanFrameWallpapers = [
     "frostVeil": 0.2,
     "listColumn": 0,
     "dockQuiet": false,
-    "clockMist": false
+    "clockMist": false,
+    "place": "Giau Pass, Dolomites, Italy"
   },
   {
     "id": "uluru",
@@ -242,8 +256,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": true,
     "nature": true,
-    "place": "Uluru-Kata Tjuta National Park, NT",
-    "credit": "Photo: Dietmar Rabich · CC BY-SA 4.0"
+    "place": "Uluru-Kata Tjuta National Park, NT"
   },
   {
     "id": "whitehaven",
@@ -260,8 +273,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": false,
     "nature": true,
-    "place": "Whitsunday Island, QLD",
-    "credit": "Photo: Hush Neo · CC BY-SA 4.0"
+    "place": "Whitsunday Island, QLD"
   },
   {
     "id": "three-sisters",
@@ -278,8 +290,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": false,
     "nature": true,
-    "place": "Blue Mountains National Park, NSW",
-    "credit": "Photo: Dietmar Rabich · CC BY-SA 4.0"
+    "place": "Blue Mountains National Park, NSW"
   },
   {
     "id": "reef",
@@ -296,8 +307,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": false,
     "nature": true,
-    "place": "Whitsunday Islands, QLD",
-    "credit": "Photo: Ayanadak123 · CC BY-SA 4.0"
+    "place": "Whitsunday Islands, QLD"
   },
   {
     "id": "cradle",
@@ -314,8 +324,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": true,
     "nature": true,
-    "place": "Tasmania",
-    "credit": "Photo: Thennicke · CC BY-SA 4.0"
+    "place": "Tasmania"
   },
   {
     "id": "kings-canyon",
@@ -332,8 +341,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": false,
     "nature": true,
-    "place": "Watarrka National Park, NT",
-    "credit": "Photo: Toby Hudson · CC BY-SA 3.0"
+    "place": "Watarrka National Park, NT"
   },
   {
     "id": "apostles",
@@ -350,8 +358,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": false,
     "nature": true,
-    "place": "Port Campbell National Park, VIC",
-    "credit": "Photo: Migo Santos · CC BY 3.0"
+    "place": "Port Campbell National Park, VIC"
   },
   {
     "id": "bay-of-fires",
@@ -368,8 +375,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": true,
     "nature": true,
-    "place": "North-east Tasmania",
-    "credit": "Photo: Diego Delso · CC BY-SA 3.0"
+    "place": "North-east Tasmania"
   },
   {
     "id": "bungle",
@@ -386,8 +392,7 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": false,
     "nature": true,
-    "place": "Purnululu National Park, WA",
-    "credit": "Photo: W. Bulach · CC BY-SA 4.0"
+    "place": "Purnululu National Park, WA"
   },
   {
     "id": "wineglass",
@@ -404,43 +409,6 @@ window.CleanFrameWallpapers = [
     "dockQuiet": false,
     "clockMist": true,
     "nature": true,
-    "place": "Freycinet National Park, TAS",
-    "credit": "Photo: Andrew Turner · CC BY-SA 4.0"
-  },
-  {
-    "id": "daintree",
-    "name": "Daintree rainforest",
-    "src": "assets/wallpapers/daintree.jpg",
-    "thumb": "assets/wallpapers/daintree-thumb.jpg",
-    "tone": "dark",
-    "ut": {
-      "tr": "light",
-      "br": "light"
-    },
-    "frostVeil": 0.12,
-    "listColumn": 0,
-    "dockQuiet": false,
-    "clockMist": false,
-    "nature": true,
-    "place": "Far North Queensland",
-    "credit": "Photo: Felix Dance · CC BY 2.0"
-  },
-  {
-    "id": "remarkable-rocks",
-    "name": "Remarkable Rocks",
-    "src": "assets/wallpapers/remarkable-rocks.jpg",
-    "thumb": "assets/wallpapers/remarkable-rocks-thumb.jpg",
-    "tone": "light",
-    "ut": {
-      "tr": "mist",
-      "br": "light"
-    },
-    "frostVeil": 0.2,
-    "listColumn": 0,
-    "dockQuiet": false,
-    "clockMist": true,
-    "nature": true,
-    "place": "Kangaroo Island, SA",
-    "credit": "Photo: Dinkum"
+    "place": "Freycinet National Park, TAS"
   }
 ];

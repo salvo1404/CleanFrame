@@ -16,5 +16,11 @@
     "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/tubi.svg",
     "licence": "CC0-1.0",
     "note": "Shape unchanged; white fill for launcher."
+  },
+  {
+    "icon": "smartiptv",
+    "source": "Original CleanFrame drawing",
+    "licence": "MIT (CleanFrame)",
+    "note": "Generic TV-with-antenna and play glyph for the Smart IPTV app; not the app's own logo."
   }
 ]

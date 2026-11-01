@@ -7,7 +7,8 @@
     "pos": "50% 50%",
     "tone": "light",
     "credit": "Ganapathy Kumar",
-    "source": "https://unsplash.com/photos/n4VMQZIkgDg"
+    "source": "https://unsplash.com/photos/n4VMQZIkgDg",
+    "place": "Big Sur, California, USA"
   },
   {
     "id": "cove",
@@ -17,7 +18,8 @@
     "pos": "50% 50%",
     "tone": "light",
     "credit": "Joshua Wordel",
-    "source": "https://unsplash.com/photos/1L_5PT7EKzU"
+    "source": "https://unsplash.com/photos/1L_5PT7EKzU",
+    "place": "Big Sur, California, USA"
   },
   {
     "id": "forest",
@@ -27,7 +29,8 @@
     "pos": "50% 50%",
     "tone": "dark",
     "credit": "Dejan Zakic",
-    "source": "https://unsplash.com/photos/rr2EF3J5F2Y"
+    "source": "https://unsplash.com/photos/rr2EF3J5F2Y",
+    "place": "Zlatar Lake, Serbia"
   },
   {
     "id": "valley",
@@ -37,7 +40,8 @@
     "pos": "50% 50%",
     "tone": "dark",
     "credit": "Aniket Deole",
-    "source": "https://unsplash.com/photos/M6XC789HLe8"
+    "source": "https://unsplash.com/photos/M6XC789HLe8",
+    "place": "Tunnel View, Yosemite, USA"
   },
   {
     "id": "night",
@@ -47,7 +51,8 @@
     "pos": "50% 50%",
     "tone": "light",
     "credit": "Mohammad Alizade",
-    "source": "https://unsplash.com/photos/4wzRuAb-KWs"
+    "source": "https://unsplash.com/photos/4wzRuAb-KWs",
+    "place": "Mashhad, Iran"
   },
   {
     "id": "peaks",
@@ -57,7 +62,8 @@
     "pos": "50% 50%",
     "tone": "dark",
     "credit": "John Rodenn Castillo",
-    "source": "https://unsplash.com/photos/rQqWOHZ96OM"
+    "source": "https://unsplash.com/photos/rQqWOHZ96OM",
+    "place": "Swiss Alps, Switzerland"
   },
   {
     "id": "bridge",
@@ -67,7 +73,8 @@
     "pos": "50% 50%",
     "tone": "dark",
     "credit": "Justin Wolff",
-    "source": "https://unsplash.com/photos/pbp_Ww2cewA"
+    "source": "https://unsplash.com/photos/pbp_Ww2cewA",
+    "place": "Golden Gate Bridge, San Francisco"
   },
   {
     "id": "ridge",
@@ -77,7 +84,8 @@
     "pos": "50% 50%",
     "tone": "dark",
     "credit": "Cristina Gottardi",
-    "source": "https://unsplash.com/photos/wndpWTiDuT0"
+    "source": "https://unsplash.com/photos/wndpWTiDuT0",
+    "place": "Monte Altissimo di Nago, Italy"
   },
   {
     "id": "golden",
@@ -87,7 +95,8 @@
     "pos": "50% 50%",
     "tone": "dark",
     "credit": "Karthik Sreenivas",
-    "source": "https://unsplash.com/photos/tmtkhWbgMu8"
+    "source": "https://unsplash.com/photos/tmtkhWbgMu8",
+    "place": "Big Sur, California, USA"
   },
   {
     "id": "summit",
@@ -97,7 +106,8 @@
     "pos": "50% 50%",
     "tone": "dark",
     "credit": "Rudra Gupta",
-    "source": "https://unsplash.com/photos/PuTSzJJ-qyU"
+    "source": "https://unsplash.com/photos/PuTSzJJ-qyU",
+    "place": "Kumaon Himalayas, India"
   },
   {
     "id": "goldcoast",
@@ -107,7 +117,8 @@
     "pos": "50% 50%",
     "tone": "light",
     "credit": "City of Gold Coast",
-    "source": "https://unsplash.com/photos/YiaGblobOGI"
+    "source": "https://unsplash.com/photos/YiaGblobOGI",
+    "place": "Surfers Paradise, QLD"
   },
   {
     "id": "sydney",
@@ -117,7 +128,8 @@
     "pos": "50% 50%",
     "tone": "light",
     "credit": "Caleb",
-    "source": "https://unsplash.com/photos/JmuyB_LibRo"
+    "source": "https://unsplash.com/photos/JmuyB_LibRo",
+    "place": "Sydney Harbour, NSW"
   },
   {
     "id": "amber",
@@ -127,7 +139,8 @@
     "pos": "50% 50%",
     "tone": "light",
     "credit": "Chris Barbalis",
-    "source": "https://unsplash.com/photos/vazZtmYFgFY"
+    "source": "https://unsplash.com/photos/vazZtmYFgFY",
+    "place": "Volterra, Italy"
   },
   {
     "id": "mint",
@@ -147,7 +160,8 @@
     "pos": "50% 50%",
     "tone": "light",
     "credit": "Cristina Gottardi",
-    "source": "https://unsplash.com/photos/CSpjU6hYo_0"
+    "source": "https://unsplash.com/photos/CSpjU6hYo_0",
+    "place": "Giau Pass, Dolomites, Italy"
   },
   {
     "id": "uluru",
@@ -277,32 +291,6 @@
     "source": "https://commons.wikimedia.org/wiki/File:Wineglass_Bay,_Freycinet_Peninsula,_Tasmania.jpg",
     "licence": "CC BY-SA 4.0",
     "place": "Freycinet National Park, TAS",
-    "nature": true
-  },
-  {
-    "id": "daintree",
-    "name": "Daintree rainforest",
-    "src": "assets/wallpapers/daintree.jpg",
-    "thumb": "assets/wallpapers/daintree-thumb.jpg",
-    "pos": "50% 50%",
-    "tone": "dark",
-    "credit": "Felix Dance",
-    "source": "https://commons.wikimedia.org/wiki/File:20160923113050_-_One_of_the_many_rivers_in_the_Daintree_(29917413112).jpg",
-    "licence": "CC BY 2.0",
-    "place": "Far North Queensland",
-    "nature": true
-  },
-  {
-    "id": "remarkable-rocks",
-    "name": "Remarkable Rocks",
-    "src": "assets/wallpapers/remarkable-rocks.jpg",
-    "thumb": "assets/wallpapers/remarkable-rocks-thumb.jpg",
-    "pos": "50% 50%",
-    "tone": "light",
-    "credit": "Dinkum",
-    "source": "https://commons.wikimedia.org/wiki/File:Remarkable_Rocks_on_Kangaroo_Island,_South_Australia.jpg",
-    "licence": "CC0",
-    "place": "Kangaroo Island, SA",
     "nature": true
   }
 ]

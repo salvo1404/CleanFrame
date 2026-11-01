@@ -4,7 +4,7 @@ The app includes all runtime JPEGs, thumbnails, registered material fields, publ
 
 ## Current List and Dock materials
 
-The runtime uses 27 photographs: the original fifteen and 12 Australian nature photographs from Wikimedia Commons (`"nature": true` in the catalogue, with place and credit for the Home caption). Each has a background, a thumbnail, a small panel backdrop and four full-stage material JPEGs. The runtime never generates blur or reads photo pixels. Generate selected materials with:
+The runtime uses 25 photographs: the original fifteen and 10 Australian nature photographs from Wikimedia Commons (`"nature": true` in the catalogue, with place and credit for the Home caption). Each has a background, a thumbnail, a small panel backdrop and four full-stage material JPEGs. The runtime never generates blur or reads photo pixels. Generate selected materials with:
 
 ```sh
 node scripts/build-materials.mjs summit,goldcoast,sydney,amber,mint,alpine

@@ -28,7 +28,7 @@ The 12 Art Mode paintings in `app/assets/art/` are public-domain works from Wiki
 
 ## Australian nature wallpapers
 
-The 12 nature wallpapers (`"nature": true` in `app/assets/wallpapers/SOURCES.json`) come from Wikimedia Commons and keep their creators' licences (CC BY 2.0, CC BY 3.0, CC BY-SA 3.0, CC BY-SA 4.0 or CC0). Each was resized and centre-cropped to 1920 x 1080; the crop, thumbnail, panel backdrop and material fields remain under the same licence. The Home caption shows the photographer and licence; `SOURCES.json` records the Commons page for each.
+The 10 nature wallpapers (`"nature": true` in `app/assets/wallpapers/SOURCES.json`) come from Wikimedia Commons and keep their creators' licences (CC BY 3.0, CC BY-SA 3.0 or CC BY-SA 4.0). Each was resized and centre-cropped to 1920 x 1080; the crop, thumbnail, panel backdrop and material fields remain under the same licence. `SOURCES.json` records the photographer, licence and Commons page for each; keep these credits with redistributions.
 
 ## Fonts and icons
 

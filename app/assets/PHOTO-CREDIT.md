@@ -4,4 +4,4 @@ The original fifteen launcher photographs and their derived material images use 
 
 These images are launcher backgrounds. Samsung Art Mode uses its own artwork and controls.
 
-The Art Mode paintings in `art/` are public domain and credited in [art/SOURCES.json](art/SOURCES.json). The 12 Australian nature wallpapers come from Wikimedia Commons under Creative Commons licences or CC0; their entries in [wallpapers/SOURCES.json](wallpapers/SOURCES.json) are marked `nature` and record each photographer, licence and source page.
+The Art Mode paintings in `art/` are public domain and credited in [art/SOURCES.json](art/SOURCES.json). The 10 Australian nature wallpapers come from Wikimedia Commons under Creative Commons licences or CC0; their entries in [wallpapers/SOURCES.json](wallpapers/SOURCES.json) are marked `nature` and record each photographer, licence and source page.

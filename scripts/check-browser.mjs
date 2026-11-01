@@ -240,7 +240,7 @@ try {
     await closePage();
     await page({ seed: { dock: [], wallpaper: 'missing', mode: 'constructor', theme: 'constructor' } });
     const s = await state();
-    check('Invalid values recover usable bounded Home', s.dock.length >= 1 && s.dock.length <= 9 && walls.some(w => w.id === s.wallpaper) && ['fixed', 'nature', 'open', '5', '15', '60'].includes(s.mode), s);
+    check('Invalid values recover usable bounded Home', s.dock.length >= 1 && s.dock.length <= 9 && walls.some(w => w.id === s.wallpaper) && ['fixed', 'open', '5', '15', '60'].includes(s.mode), s);
     await closePage();
     await page({ seed: baseline({ dock: [EXTRA, 'netflix'], lastApp: EXTRA }), catalogFailure: true });
     await library();
@@ -567,7 +567,7 @@ try {
     check('Photo tools are reachable from Background', backgroundActions.includes('background.wallpaper') && backgroundActions.includes('background.rotation'), backgroundActions);
     await act('background.rotation');
     const rotationRows = await radios();
-    check('All six rotation modes are visible together', same(rotationRows.map(r => r.action).sort(), ['fixed', 'nature', 'open', '5', '15', '60'].map(v => 'rotation.' + v).sort()), rotationRows);
+    check('All five rotation modes are visible together', same(rotationRows.map(r => r.action).sort(), ['fixed', 'open', '5', '15', '60'].map(v => 'rotation.' + v).sort()), rotationRows);
     await nav('back');
     check('Rotation Back restores its Background row', (await state()).settingsGroup === 'background' && (await state()).focusAction === 'background.rotation', await call('where'));
     await group('samsung');
@@ -1030,6 +1030,17 @@ try {
     check('Browser launch honestly requires TV', /TV/.test(await current.locator('#stage').innerText()));
     await nav('back'); await library();
     check('Browser All Apps has no installed fixtures', /TV/.test(await current.locator('#stage').innerText()) && !(await current.locator('[data-action^="apps.open."]').count()));
+  });
+  await run('Shuffle deals every wallpaper once before repeating', async () => {
+    await page();
+    await current.evaluate(() => localStorage.removeItem('cleanframe.shuffle.v1'));
+    const start = (await state()).wallpaper, shown = [];
+    for (let i = 0; i < walls.length - 1; i++) { await act('util.shuffle'); await ready(); shown.push((await state()).wallpaper); }
+    check('A round of shuffles never repeats a wallpaper', new Set(shown).size === walls.length - 1 && shown[0] !== start, shown);
+    check('Shuffle keeps the rotation setting', (await state()).mode === 'fixed');
+    await current.reload(); await ready(); const before = (await state()).wallpaper;
+    await act('util.shuffle'); await ready();
+    check('Shuffle continues after a restart without repeating the current photo', (await state()).wallpaper !== before);
   });
   await run('Art slideshow on TVs without Samsung Art Mode', async () => {
     // Reference non-Frame TV: Samsung's Art app is installed but shows nothing.
