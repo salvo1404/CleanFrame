@@ -22,6 +22,10 @@ The public app uses Manrope, Geist and Newsreader. A personal widget containing 
 
 Brand marks identify services. Their owners retain trademark rights; this project claims no endorsement or affiliation. The older Australian TV icon archive's GPL text is retained for historical provenance only; no current icon uses that archive.
 
+## Art slideshow and nature wallpaper images
+
+The paintings in `app/assets/art/` are public-domain works reproduced from Wikimedia Commons (`app/assets/art/SOURCES.json`). The Australian nature wallpapers are used under their Creative Commons licences (CC BY 2.0, CC BY 3.0, CC BY-SA 3.0, CC BY-SA 4.0) or CC0, as recorded per image with its creator, licence and source page in `app/assets/wallpapers/SOURCES.json` (entries marked `nature`). Each photograph was resized and centre-cropped, and its thumbnail, panel and material fields are derived from it; adapted CC BY-SA images remain under their CC BY-SA licence. Licence texts: https://creativecommons.org/licenses/.
+
 ## Photographs and derived materials
 
 The fifteen photo pages were individually checked on 20 October 2026. Each displayed its credited author and free use under the [Unsplash License](https://unsplash.com/license). The [asset source register](docs/asset-sources.md) links every page. Runtime paths are in `app/assets/wallpapers/SOURCES.json`.

@@ -633,3 +633,21 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000}
 .l-list .quiet-utils.is-text .u-content>*+*{margin-left:0;margin-right:0}
 .quiet-utils.is-text .u-content>*+*{margin-left:0}
 .l-list .quiet-utils.is-text .u .u-content>*+*{margin-right:0}
+
+/* Art slideshow for TVs without Samsung Art Mode. Paintings sit on a dark mat; photographs fill the screen. */
+.artshow{position:absolute;z-index:8;left:0;top:0;width:1920px;height:1080px;overflow:hidden;background:#0c0b0a;color:#f6f1e7;font-family:Manrope,Arial,sans-serif}
+.artshow[hidden]{display:none}
+.art-img{position:absolute;left:0;top:0;width:1920px;height:1080px;max-width:none;object-fit:cover;object-position:50% 50%;opacity:0;transform:translateZ(0);transition:opacity 1200ms linear}
+.art-img.is-painting{left:120px;top:64px;width:1680px;height:952px;object-fit:contain}
+.art-img.is-on{opacity:1}
+.art-caption{position:absolute;left:64px;bottom:32px;max-width:1200px;padding:56px 120px 40px 48px;background:radial-gradient(farthest-side at 30% 65%,rgba(8,6,4,.42),rgba(8,6,4,0));opacity:0;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,.55),0 2px 14px rgba(0,0,0,.45);transition:opacity 600ms linear}
+.art-caption.is-on{opacity:.94}
+.art-title{font-size:34px;line-height:42px;font-weight:600;letter-spacing:-.3px}
+.art-line{font-size:24px;line-height:32px;font-weight:500;opacity:.86}
+.art-credit{margin-top:6px;font-size:18px;line-height:24px;font-weight:500;opacity:.7}
+
+/* Place caption for nature wallpapers: bottom centre, below the Dock and between the List and its controls. */
+.wall-caption{position:absolute;z-index:1;left:480px;right:480px;bottom:30px;display:none;flex-direction:column;align-items:center;text-align:center;color:#f6f1e7;pointer-events:none;text-shadow:0 1px 2px rgba(14,10,6,.55),0 2px 10px rgba(14,10,6,.45)}
+.wall-caption.is-on{display:flex}
+.wc-place{font-size:22px;line-height:28px;font-weight:500;letter-spacing:-.1px;opacity:.86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.wc-credit{margin-top:2px;font-size:15px;line-height:20px;font-weight:500;opacity:.62;white-space:nowrap}

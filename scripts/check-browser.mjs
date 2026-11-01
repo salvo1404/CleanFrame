@@ -42,7 +42,7 @@ async function run(name, fn) {
 async function closePage() { if (current) { current.__closing = true; await current.close(); current = null; } }
 
 // Production still calls its unmodified device.js adapter.
-function installHarness({ seed, legacy, mock, catalog, minuteMs, catalogFailure, noFontAPI, storageFailure, currentAppId, initiallyHidden, pauseHiddenFrames, rejectDecode }) {
+function installHarness({ seed, legacy, mock, catalog, minuteMs, catalogFailure, noFontAPI, storageFailure, currentAppId, initiallyHidden, pauseHiddenFrames, rejectDecode, artApp = true, model = 'QN55LS03FAFXZA' }) {
   if (!sessionStorage.getItem('__cleanframe_seeded')) {
     if (seed !== undefined) localStorage.setItem('cleanframe.home.v1', typeof seed === 'string' ? seed : JSON.stringify(seed));
     if (legacy !== undefined) localStorage.setItem('cleanframe.shore.v1', typeof legacy === 'string' ? legacy : JSON.stringify(legacy));
@@ -76,12 +76,17 @@ function installHarness({ seed, legacy, mock, catalog, minuteMs, catalogFailure,
   if (rejectDecode) HTMLImageElement.prototype.decode = function () { return Promise.reject(new DOMException('Synthetic decode rejection')); };
   if (noFontAPI) Object.defineProperty(document, 'fonts', { configurable: true, value: undefined });
   if (!mock) return;
-  window.__tv = { catalog, catalogFailure: !!catalogFailure, launchFailure: false, holdCatalog: false, pending: [], calls: [], catalogCalls: 0 };
+  window.__tv = { catalog, artApp, catalogFailure: !!catalogFailure, launchFailure: false, holdCatalog: false, pending: [], calls: [], catalogCalls: 0 };
   window.tizen = {
+    systeminfo: { getCapability(key) { if (key === 'http://tizen.org/system/model_name') return model; throw { name: 'NotSupportedError' }; } },
     ApplicationControlData: function (key, value) { this.key = key; this.value = value; },
     ApplicationControl: function (operation, uri, mime, category, data) { Object.assign(this, { operation, uri, mime, category, data }); },
     application: {
       getCurrentApplication() { return { appInfo: { id: currentAppId || 'nClrkHome1.FrameHome' } }; },
+      getAppInfo(id) {
+        if (id === 'org.tizen.art-app' && window.__tv.artApp) return { id };
+        throw { name: 'NotFoundError', message: 'App not installed for QA' };
+      },
       getAppsInfo(ok, fail) {
         const tv = window.__tv;
         tv.catalogCalls++;
@@ -235,7 +240,7 @@ try {
     await closePage();
     await page({ seed: { dock: [], wallpaper: 'missing', mode: 'constructor', theme: 'constructor' } });
     const s = await state();
-    check('Invalid values recover usable bounded Home', s.dock.length >= 1 && s.dock.length <= 9 && walls.some(w => w.id === s.wallpaper) && ['fixed', 'open', '5', '15', '60'].includes(s.mode), s);
+    check('Invalid values recover usable bounded Home', s.dock.length >= 1 && s.dock.length <= 9 && walls.some(w => w.id === s.wallpaper) && ['fixed', 'nature', 'open', '5', '15', '60'].includes(s.mode), s);
     await closePage();
     await page({ seed: baseline({ dock: [EXTRA, 'netflix'], lastApp: EXTRA }), catalogFailure: true });
     await library();
@@ -333,7 +338,7 @@ try {
         await look({ bg: 'photo', layout, controls, focus: 'glass', font: 'manrope' }); await scene('home');
         if ((await call('where')).zone === 'util') await nav('back');
         await nav(layout === 'dock' ? 'up' : 'right');
-        await nav(...Array(3).fill(layout === 'dock' ? 'left' : 'up'));
+        await nav(...Array(4).fill(layout === 'dock' ? 'left' : 'up'));
         await current.waitForTimeout(180);
         const spacing = await current.evaluate(({ layout, controls }) => {
           const scale = document.getElementById('stage').getBoundingClientRect().width / 1920;
@@ -346,9 +351,9 @@ try {
           });
         }, { layout, controls });
         check(layout + '/' + controls + ' uses spacing between visible children at ' + width,
-          spacing.length === 3 && spacing.every(s => s.children === (controls === 'both' ? 2 : 1) && Math.abs(s.extraWidth - s.gap) < .5), spacing);
+          spacing.length === 4 && spacing.every(s => s.children === (controls === 'both' ? 2 : 1) && Math.abs(s.extraWidth - s.gap) < .5), spacing);
         const focused = [];
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 4; i++) {
           if (i) await nav(layout === 'dock' ? 'right' : 'down');
           focused.push(await current.evaluate(() => {
             const button = document.querySelector('#utils .u.is-focus'), lens = document.querySelector('.ut-lens.is-current');
@@ -562,7 +567,7 @@ try {
     check('Photo tools are reachable from Background', backgroundActions.includes('background.wallpaper') && backgroundActions.includes('background.rotation'), backgroundActions);
     await act('background.rotation');
     const rotationRows = await radios();
-    check('All five rotation modes are visible together', same(rotationRows.map(r => r.action).sort(), ['fixed', 'open', '5', '15', '60'].map(v => 'rotation.' + v).sort()), rotationRows);
+    check('All six rotation modes are visible together', same(rotationRows.map(r => r.action).sort(), ['fixed', 'nature', 'open', '5', '15', '60'].map(v => 'rotation.' + v).sort()), rotationRows);
     await nav('back');
     check('Rotation Back restores its Background row', (await state()).settingsGroup === 'background' && (await state()).focusAction === 'background.rotation', await call('where'));
     await group('samsung');
@@ -1025,6 +1030,28 @@ try {
     check('Browser launch honestly requires TV', /TV/.test(await current.locator('#stage').innerText()));
     await nav('back'); await library();
     check('Browser All Apps has no installed fixtures', /TV/.test(await current.locator('#stage').innerText()) && !(await current.locator('[data-action^="apps.open."]').count()));
+  });
+  await run('Art slideshow on TVs without Samsung Art Mode', async () => {
+    // Reference non-Frame TV: Samsung's Art app is installed but shows nothing.
+    await page({ model: 'UN75CU7000DXZA' });
+    await current.evaluate(() => { localStorage.removeItem('cleanframe.art.v1'); ShoreQA.artMs = 600; });
+    await act('util.art'); await current.waitForFunction(() => ShoreQA.where().view === 'art');
+    check('Art Mode opens the slideshow without a native call', (await current.evaluate(() => __tv.calls.length)) === 0);
+    const shown = () => current.evaluate(() => { const img = document.querySelector('.art-img.is-on'); return img ? { src: img.getAttribute('src'), painting: img.classList.contains('is-painting'), caption: document.getElementById('artCaption').innerText } : null; });
+    await current.waitForFunction(() => document.querySelector('.art-img.is-on'));
+    const first = await shown();
+    check('Slideshow starts with a captioned painting', first.painting && /starry\.jpg$/.test(first.src) && /van Gogh/.test(first.caption), first);
+    await current.evaluate(() => { ShoreQA.artMs = 0; }); await nav('right');
+    await current.waitForFunction(() => /wave\.jpg$/.test(document.querySelector('.art-img.is-on').getAttribute('src')));
+    const second = await shown();
+    check('Right moves to the next painting', second.painting && /Hokusai/.test(second.caption), second);
+    await current.evaluate(() => { ShoreQA.artMs = 600; }); await nav('right'); await nav('left');
+    await current.waitForFunction(() => !/wave\.jpg$/.test(document.querySelector('.art-img.is-on').getAttribute('src')), null, { timeout: 5000 });
+    check('Slideshow advances on its interval', true);
+    await nav('back');
+    const closed = await current.evaluate(() => ({ view: ShoreQA.where().view, focus: ShoreQA.where().focusAction, hidden: document.getElementById('artShow').hidden, srcs: [...document.querySelectorAll('.art-img')].map(i => i.getAttribute('src')) }));
+    check('Back returns to Art Mode on Home and releases images', closed.view === 'home' && closed.focus === 'util.art' && closed.hidden && closed.srcs.every(s => s === null), closed);
+    check('Next opening continues from the saved picture', Number(await current.evaluate(() => localStorage.getItem('cleanframe.art.v1'))) > 1);
   });
   section = 'Run integrity';
   report.sourceAfter = hashes();

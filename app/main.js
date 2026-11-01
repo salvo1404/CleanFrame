@@ -28,8 +28,12 @@
   var WALLS = window.CleanFrameWallpapers || [{ id: 'misty', name: 'Misty coast', tone: 'light', ut: { tr: 'mist', br: 'mist' }, frostVeil: .20 }];
   var ADAPTIVE_INK = window.CleanFrameAdaptiveInk || {};
   WALLS.forEach(function (w) { w.ut = w.ut || { tr: 'light', br: 'light' }; w.frostVeil = w.frostVeil || .12; });
+  // Nature photos change only on Home open or Shuffle; timed rotation keeps to the original gallery.
+  var NATURE = WALLS.filter(function (w) { return w.nature; }), CLASSIC = WALLS.filter(function (w) { return !w.nature; });
+  if (!CLASSIC.length) CLASSIC = WALLS;
+  function nextIn(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[(i + 1) % list.length]; return list[0]; }
   var MODES = [
-    { id: 'fixed', name: 'Fixed', min: 0 }, { id: 'open', name: 'Each time Home opens', min: 0 },
+    { id: 'fixed', name: 'Fixed', min: 0 }, { id: 'nature', name: 'Nature', min: 0 }, { id: 'open', name: 'Each time Home opens', min: 0 },
     { id: '5', name: 'Every 5 minutes', min: 5 }, { id: '15', name: 'Every 15 minutes', min: 15 },
     { id: '60', name: 'Every hour', min: 60 }
   ];
@@ -47,11 +51,12 @@
   var LOOK_VALUES = { bg: ['dark', 'light', 'photo'], layout: ['list', 'dock'], apps: ['icons', 'both', 'text'], font: Object.keys(FONTS).filter(function (id) { return id === 'manrope' || PRIVATE_FONTS.indexOf(id) >= 0; }), controls: ['icons', 'both', 'text'], focus: ['type', 'glass'], material: ['soft', 'frost', 'tint'] };
   var LOOK_NAMES = { bg: 'Background', layout: 'Layout', apps: 'Apps', font: 'Font', controls: 'Home controls', focus: 'Focus', material: 'Material' };
   var VALUE_NAMES = { dark: 'Dark', light: 'Light', photo: 'Photo', list: 'List', dock: 'Dock', type: 'Type', glass: 'Glass', soft: 'Soft', frost: 'Frost', tint: 'Clear tint', icons: 'Icons', both: 'Icons and text', text: 'Text' };
-  var UTIL = { art: ['Art Mode', 'art'], apps: ['All apps', 'apps'], arrange: ['Arrange', 'arrange'], settings: ['Settings', 'settings'] };
+  var UTIL = { shuffle: ['Shuffle', 'shuffle'], art: ['Art Mode', 'art'], apps: ['All apps', 'apps'], arrange: ['Arrange', 'arrange'], settings: ['Settings', 'settings'] };
   var MSG = {
     leave: { title: 'Leave Home?', line: 'Open Samsung Home?', note: '', actions: [['stay', 'Stay'], ['samsung', 'Samsung Home']] }
   };
   var SVG = {
+    shuffle: '<path d="M3.5 7.5h3.2c2 0 3.1.9 4.3 2.7l2 3.1c1.2 1.8 2.3 2.7 4.3 2.7h3.2"/><path d="M3.5 16h3.2c1.4 0 2.4-.5 3.3-1.4M14.2 8.9c.9-.9 1.9-1.4 3.3-1.4h3"/><path d="m18 5 2.5 2.5L18 10M18 13.5l2.5 2.5-2.5 2.5"/>',
     art: '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="9.8" r="1.5"/><path d="m4.5 17.5 4.5-4.5 3 3 2.5-2.5 5 5"/>',
     apps: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/>',
     arrange: '<path d="M4 8.5h14M15 5.5l3 3-3 3M20 15.5H6M9 12.5l-3 3 3 3"/>',
@@ -73,7 +78,7 @@
   var REDUCED_MOTION = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var S = {
     variant: 'B', geom: 'broad', c: null, stack: null,
-    sel: null, selIdx: 0, lastUtil: 0, appsFocus: null, settingsFocus: 'background', appearanceFocus: 'bg', detailFocus: {},
+    sel: null, selIdx: 0, lastUtil: 1, appsFocus: null, settingsFocus: 'background', appearanceFocus: 'bg', detailFocus: {},
     undo: [], removedAt: {}, note: null, err: null,
     writes: 0, failed: 0, log: [], logN: 0, lastLaunch: null, press: null,
     wallShown: null, wallPending: null, wallError: null,
@@ -365,7 +370,8 @@
     var saved = load(), initial; S.c = clean(saved); initial = next(S.c.home.slice(), S.c.recent.slice());
     S.stack = [{ id: 'home', f: { zone: 'apps', u: 0 } }];
     S.sel = S.c.lastApp; S.selIdx = S.c.home.indexOf(S.sel);
-    if (saved && initial.mode === 'open') initial.wall = WALLS[(wallIndex(initial.wall) + 1) % WALLS.length].id;
+    if (saved && initial.mode === 'open') initial.wall = nextIn(CLASSIC, initial.wall).id;
+    if (saved && initial.mode === 'nature' && NATURE.length) initial.wall = nextIn(NATURE, initial.wall).id;
     // Keep the old schema keys alongside the builder values for in-place updates.
     try { localStorage.setItem(KEY, JSON.stringify(serialise(initial))); S.c = initial; storageOk = true; } catch (e) { storageOk = false; }
   }
@@ -491,16 +497,24 @@
   }
 
   /* ---------- Navigation targets ---------- */
-  function utils() { return ['art', 'apps', 'settings']; }
+  function utils() { return NATURE.length ? ['shuffle', 'art', 'apps', 'settings'] : ['art', 'apps', 'settings']; }
   /* prev/next run along the apps; out goes to the controls, inn comes back (or to a per-app action). */
   function axes() {
     var v = S.c.layout === 'list';
     return { prev: v ? 'up' : 'left', next: v ? 'down' : 'right', out: v ? 'right' : 'up', inn: v ? 'left' : 'down' };
   }
   function utilAction(u) {
-    if (u === 'art') perform('Art Mode', FrameDevice.art);
+    if (u === 'art') { if (FrameDevice.hasArt()) perform('Art Mode', FrameDevice.art); else openArt(); }
+    else if (u === 'shuffle') shuffleWall();
     else if (u === 'apps') openApps();
     else openSettings();
+  }
+  // Shuffle shows a different nature photo and keeps Nature rotation on.
+  function shuffleWall() {
+    var pool = NATURE.filter(function (w) { return w.id !== S.c.wall; }), w = pool[Math.floor(Math.random() * pool.length)], c;
+    if (!w) return;
+    if (S.c.mode !== 'nature') { c = next(S.c.home.slice(), S.c.recent.slice()); c.mode = 'nature'; if (!write(c, 'Wallpaper rotation')) return; }
+    setLook({ bg: 'photo', wall: w.id }, { row: 'bg' });
   }
   function addAppsRoute() { openEditor('home'); }
   function openSettings() { push({ id: 'settings', f: { id: S.settingsFocus } }); }
@@ -962,6 +976,24 @@
     point: function (t, z, i) { if (z === 'act') { t.f.b = i; this.key(t, 'ok'); } }
   };
 
+  /* ---------- Art slideshow (TVs without Samsung Art Mode) ---------- */
+  var ART = (window.CleanFrameArt || []).filter(function (a) { return a.kind === 'painting'; }), ART_KEY = 'cleanframe.art.v1', ART_MS = 60000, ART_CAPTION_MS = 8000;
+  function openArt() {
+    var i = 0;
+    if (!ART.length) { message('Art Mode', 'No artwork is bundled with this build.'); return; }
+    try { i = parseInt(localStorage.getItem(ART_KEY), 10) || 0; } catch (e) { i = 0; }
+    push({ id: 'art', i: ((i % ART.length) + ART.length) % ART.length, f: {} });
+  }
+  V.art = {
+    overlay: true,
+    key: function (t, k) {
+      if (k === 'ok' || k === 'back') pop();
+      else if (k === 'right') t.i = (t.i + 1) % ART.length;
+      else if (k === 'left') t.i = (t.i + ART.length - 1) % ART.length;
+      else artShow.reveal = true;
+    }
+  };
+
   /* ---------- Dispatch ---------- */
   function norm() { var t = top(), v = V[t.id]; if (v.norm) v.norm(t); }
   function press(k) {
@@ -975,7 +1007,7 @@
 
   /* ---------- Rendering ---------- */
   var $ = function (id) { return document.getElementById(id); };
-  var stage = $('stage'), homeEl = $('home'), caption = $('caption'), utilsEl = $('utils');
+  var stage = $('stage'), homeEl = $('home'), caption = $('caption'), utilsEl = $('utils'), wallCaption = $('wallCaption');
   var utilFocusLabel = $('utilFocusLabel'), utilFocusKey = '', appFocusName = $('appFocusName');
   var dock = $('dock'), shelf = $('shelf'), track = $('track'), plate = $('plate'), matScrim = $('matScrim'), dockEmpty = $('dockEmpty');
   var cueL = $('cueL'), cueR = $('cueR'), dockAction = $('dockAction');
@@ -1024,10 +1056,65 @@
     if (!adaptive && shown.dockClockInk) stage.style.setProperty('--dock-clock-ink', shown.dockClockInk);
     else stage.style.removeProperty('--dock-clock-ink');
     applyHomeFont();
-    if (!sheet) renderHome(t);
+    if (!sheet && !V[t.id].overlay) renderHome(t);
     renderSheet(t, sheet);
     renderAppearance(t);
     renderFocusStatus(t);
+    renderArt(t);
+  }
+
+  var artEl = $('artShow'), artImgs = [$('artImgA'), $('artImgB')], artCaption = $('artCaption');
+  var artShow = { shown: -1, layer: 0, token: 0, timer: 0, captionTimer: 0, reveal: false };
+  function renderArt(t) {
+    if (t.id !== 'art') { if (!artEl.hidden) stopArt(); return; }
+    artEl.hidden = false;
+    if (artShow.shown !== t.i) showArt(t.i);
+    else if (artShow.reveal) showArtCaption();
+    artShow.reveal = false;
+  }
+  function stopArt() {
+    artEl.hidden = true; artShow.token++; artShow.shown = -1;
+    clearTimeout(artShow.timer); clearTimeout(artShow.captionTimer);
+    artCaption.className = 'art-caption';
+    // Release the decoded images while the slideshow is closed.
+    artImgs.forEach(function (img) { img.onload = img.onerror = null; img.className = 'art-img'; img.removeAttribute('src'); });
+  }
+  function showArtCaption() {
+    clearTimeout(artShow.captionTimer);
+    artCaption.className = 'art-caption is-on';
+    artShow.captionTimer = setTimeout(function () { artCaption.className = 'art-caption'; }, ART_CAPTION_MS);
+  }
+  function scheduleArt() {
+    clearTimeout(artShow.timer);
+    if (document.hidden || top().id !== 'art') return;
+    artShow.timer = setTimeout(function () {
+      var t = top();
+      if (t.id !== 'art') return;
+      t.i = (t.i + 1) % ART.length;
+      render();
+    }, QA.artMs || ART_MS);
+  }
+  function showArt(i) {
+    var item = ART[i], token = ++artShow.token, done = false, next = artImgs[1 - artShow.layer], prev = artImgs[artShow.layer];
+    artShow.shown = i;
+    clearTimeout(artShow.timer);
+    function loaded() {
+      if (done || token !== artShow.token) return;
+      done = true;
+      next.className = 'art-img is-on ' + (item.kind === 'painting' ? 'is-painting' : 'is-photo');
+      prev.className = prev.className.replace(' is-on', '');
+      artShow.layer = 1 - artShow.layer;
+      artCaption.innerHTML = '<div class="art-title">' + esc(item.title) + '</div><div class="art-line">' + esc(item.line) + '</div>' + (item.credit ? '<div class="art-credit">' + esc(item.credit) + '</div>' : '');
+      showArtCaption();
+      try { localStorage.setItem(ART_KEY, String((i + 1) % ART.length)); } catch (e) { /* The slideshow still works without a saved position. */ }
+      scheduleArt();
+    }
+    // A missing picture keeps the current one on screen and moves on at the next interval.
+    next.onerror = function () { if (token === artShow.token) scheduleArt(); };
+    next.onload = loaded;
+    next.removeAttribute('src');
+    next.src = 'assets/art/' + item.id + '.jpg';
+    if (next.complete && next.naturalWidth) loaded();
   }
 
   function applyHomeFont() {
@@ -1049,12 +1136,18 @@
   function renderHome(t) {
     var hs = homeState(t);
     renderCaption(t, hs);
+    renderWallCaption();
     renderUtils(hs);
     if (S.c.layout === 'list') renderList(hs);
     else { photoMode = null; renderDock(hs); }
     renderAppFocusName(hs);
   }
 
+  function renderWallCaption() {
+    var w = S.c.bg === 'photo' && S.shown && S.shown.bg === 'photo' ? wall(S.shown.wall) : null;
+    setHTML(wallCaption, w && w.nature ? '<span class="wc-place">' + esc(w.name) + ' · ' + esc(w.place) + '</span>' + (w.credit ? '<span class="wc-credit">' + esc(w.credit) + '</span>' : '') : '');
+    wallCaption.className = 'wall-caption' + (w && w.nature ? ' is-on' : '');
+  }
   function clockText() {
     var d = new Date(), h = d.getHours() % 12 || 12, m = d.getMinutes();
     return h + ':' + (m < 10 ? '0' : '') + m;
@@ -1461,7 +1554,7 @@
   /* Keep the retry or membership state on the focused control. The stage-level line
      shares its position without changing the control's identity or key behaviour. */
   function renderFocusStatus(t) {
-    if (isSettingsDetail(t)) { focusStatus.className = 'focus-status'; return; }
+    if (isSettingsDetail(t) || t.id === 'art') { focusStatus.className = 'focus-status'; return; }
     var root = isSettingsDetail(top()) ? appearanceEl : sheetEl.hidden ? homeEl : sheetEl, active = root.querySelectorAll('.is-focus[data-action]'), target = null, text = S.err ? 'Not saved. OK tries again.' : '', i, r, sr, scale, x, y, w, action, solid, photoRow = false, photoFree = false;
     Array.prototype.forEach.call(stage.querySelectorAll('.has-local-status'), function (el) { el.className = el.className.replace(/\s+has-local-status/g, ''); });
     for (i = 0; i < active.length; i++) if (renderedAction(active[i])) { target = active[i]; break; }
@@ -1763,7 +1856,7 @@
     activeSince = Date.now();
     rotationTimer = setTimeout(function () {
       pauseRotation(); activeMs = 0;
-      if (rotationActive()) setLook({ wall: WALLS[(wallIndex(S.c.wall) + 1) % WALLS.length].id }, { row: 'bg' });
+      if (rotationActive()) setLook({ wall: nextIn(CLASSIC, S.c.wall).id }, { row: 'bg' });
     }, Math.max(10, mode().min * QA.minuteMs - activeMs));
   }
   function updateClock() {
@@ -1846,9 +1939,9 @@
   window.addEventListener('focus', function () { release(); focusStage(); after(); updateClock(); });
   document.addEventListener('visibilitychange', function () {
     heldKeys = {};
-    if (document.hidden) { pauseRotation(); clearTimeout(clockTimer); }
+    if (document.hidden) { pauseRotation(); clearTimeout(clockTimer); clearTimeout(artShow.timer); }
     else {
-      release();
+      release(); scheduleArt();
       if (S.c.bg === 'photo' && !S.pending && !S.previewBundle && (!committedBundle || S.bundleKey !== bundleKey(S.c))) setLook({}, { transient: true, startup: true });
       after(); updateClock(); focusStage();
     }

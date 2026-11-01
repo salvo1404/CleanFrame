@@ -22,6 +22,14 @@ Reviewed on 20 October 2026. Each of the fifteen linked Unsplash photo pages dis
 
 The background preparation and material rendering steps are described in [asset generation](assets.md). Full-size original photos and research studies are outside the public source.
 
+## Art slideshow
+
+The 12 Art Mode paintings in `app/assets/art/` are public-domain works from Wikimedia Commons, reviewed on 1 November 2026. `app/assets/art/SOURCES.json` lists each title, artist and Commons page.
+
+## Australian nature wallpapers
+
+The 12 nature wallpapers (`"nature": true` in `app/assets/wallpapers/SOURCES.json`) come from Wikimedia Commons and keep their creators' licences (CC BY 2.0, CC BY 3.0, CC BY-SA 3.0, CC BY-SA 4.0 or CC0). Each was resized and centre-cropped to 1920 x 1080; the crop, thumbnail, panel backdrop and material fields remain under the same licence. The Home caption shows the photographer and licence; `SOURCES.json` records the Commons page for each.
+
 ## Fonts and icons
 
 Public fonts are Manrope, Geist and Newsreader under SIL OFL 1.1. Their licence texts are beside the assets; Geist and Newsreader source URLs and hashes are in `app/assets/fonts/SOURCES.json`.

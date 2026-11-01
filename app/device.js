@@ -56,6 +56,16 @@
       api().launchAppControl(control, 'org.tizen.art-app', function () { finish(null); }, function (err) { finish(failure(err)); });
     } catch (err) { finish(failure(err)); }
   }
+  // Non-Frame TVs can ship org.tizen.art-app in shared firmware but show nothing when it is launched
+  // (seen on a UN75CU7000), so native Art Mode is used only on The Frame (LS0x model codes) with the app installed.
+  function hasArt() {
+    var model = '';
+    try { model = String(window.tizen.systeminfo.getCapability('http://tizen.org/system/model_name') || ''); }
+    catch (err) { return false; }
+    if (!/LS0\d/i.test(model)) return false;
+    try { return !!(api() && api().getAppInfo('org.tizen.art-app')); }
+    catch (err) { return false; }
+  }
   function home(done) { launchApp('com.samsung.tv.csfs', done); }
   function settings(done) { launchApp('com.samsung.tv.coba.setting', done); }
   function apps(done) {
@@ -80,5 +90,5 @@
       }, function (err) { finish(failure(err)); });
     } catch (err) { finish(failure(err)); }
   }
-  window.FrameDevice = { launch: launch, launchApp: launchApp, art: art, home: home, settings: settings, apps: apps };
+  window.FrameDevice = { launch: launch, launchApp: launchApp, art: art, hasArt: hasArt, home: home, settings: settings, apps: apps };
 }());

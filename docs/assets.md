@@ -4,7 +4,7 @@ The app includes all runtime JPEGs, thumbnails, registered material fields, publ
 
 ## Current List and Dock materials
 
-The 0.6 runtime uses fifteen photographs. Each has a background, a thumbnail, a small panel backdrop and four full-stage material JPEGs. The runtime never generates blur or reads photo pixels. Generate selected materials with:
+The runtime uses 27 photographs: the original fifteen and 12 Australian nature photographs from Wikimedia Commons (`"nature": true` in the catalogue, with place and credit for the Home caption). Each has a background, a thumbnail, a small panel backdrop and four full-stage material JPEGs. The runtime never generates blur or reads photo pixels. Generate selected materials with:
 
 ```sh
 node scripts/build-materials.mjs summit,goldcoast,sydney,amber,mint,alpine
@@ -38,3 +38,7 @@ The retained generator covers all fifteen filenames and writes `.local/materials
 For another photo, add its source/credit to `SOURCES.json`, prepare its background and thumbnail, add the gallery entry in `catalog.js`, generate the four registered materials and panel backdrop, then measure and review its foreground metadata. Keep the crop identical across all assets. Run source and browser checks before packaging.
 
 Source pages and licence observations are recorded in [asset sources](asset-sources.md).
+
+## App icon
+
+`app/icon.png` is an original CleanFrame drawing: a picture frame around a dusk landscape. Its vector source is `docs/app-icon.svg`; render it at 512 x 512 PNG to replace the icon.
