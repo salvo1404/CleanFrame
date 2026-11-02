@@ -338,7 +338,7 @@
     records.slice(0, 256).forEach(function (a) {
       var brand;
       if (!a || !safeId(a.id) || !safeId(a.appId) || typeof a.name !== 'string' || !a.name.trim() || app(a.id)) return;
-      brand = EXTRA_MARKS.indexOf(a.brand) >= 0 ? a.brand : FrameDevice.brandOf(a.appId);
+      brand = EXTRA_MARKS.indexOf(a.brand) >= 0 ? a.brand : FrameDevice.brandOf(a.appId, a.name);
       APPS.push({ id: a.id, appId: a.appId, name: a.name.slice(0, 160), brand: brand, mark: !!brand, icon: safeIcon(a.icon) });
     });
     (Array.isArray(s.home) ? s.home : Array.isArray(s.dock) ? s.dock : []).forEach(function (id) {

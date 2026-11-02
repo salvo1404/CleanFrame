@@ -83,7 +83,7 @@
           if (!primary && /(?:service|worker|preview|promotion|plugin|launcher|test|sdk|^ep[ -]|factory|daemon)/i.test(a.name + ' ' + a.id)) return;
           if (/-dummy$/.test(a.id) || a.id === 'com.samsung.tv.cobalt-yt') return;
           seen[a.id] = true;
-          result.push({ appId: a.id, name: a.name, brand: known[a.id] || EXTRA_BRANDS[a.id] || '', icon: a.iconPath || '', rank: primary ? Object.keys(IDS).indexOf(known[a.id]) : (stream ? 20 : 30) });
+          result.push({ appId: a.id, name: a.name, brand: known[a.id] || brandOf(a.id, a.name), icon: a.iconPath || '', rank: primary ? Object.keys(IDS).indexOf(known[a.id]) : (stream ? 20 : 30) });
         });
         result.sort(function (a, b) { return a.rank - b.rank || a.name.toLowerCase().localeCompare(b.name.toLowerCase()); });
         finish(null, result);
@@ -91,6 +91,10 @@
     } catch (err) { finish(failure(err)); }
   }
   // Saved Home records from before a mark was added still get it without a catalogue refresh.
-  function brandOf(appId) { return EXTRA_BRANDS.hasOwnProperty(appId) ? EXTRA_BRANDS[appId] : ''; }
+  // Any IPTV player gets the shared generic TV glyph rather than its own coloured tile.
+  function brandOf(appId, name) {
+    if (EXTRA_BRANDS.hasOwnProperty(appId)) return EXTRA_BRANDS[appId];
+    return /iptv/i.test((name || '') + ' ' + appId) ? 'smartiptv' : '';
+  }
   window.FrameDevice = { brandOf: brandOf, launch: launch, launchApp: launchApp, art: art, hasArt: hasArt, home: home, settings: settings, apps: apps };
 }());
