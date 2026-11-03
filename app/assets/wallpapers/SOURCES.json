@@ -143,16 +143,6 @@
     "place": "Volterra, Italy"
   },
   {
-    "id": "mint",
-    "name": "Mint wave",
-    "src": "assets/wallpapers/mint.jpg",
-    "thumb": "assets/wallpapers/mint-thumb.jpg",
-    "pos": "50% 50%",
-    "tone": "light",
-    "credit": "MagicPattern",
-    "source": "https://unsplash.com/photos/87PP9Zd7MNo"
-  },
-  {
     "id": "alpine",
     "name": "Alpine glow",
     "src": "assets/wallpapers/alpine.jpg",

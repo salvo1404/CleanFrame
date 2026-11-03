@@ -211,21 +211,6 @@ window.CleanFrameWallpapers = [
     "place": "Volterra, Italy"
   },
   {
-    "id": "mint",
-    "name": "Mint wave",
-    "src": "assets/wallpapers/mint.jpg",
-    "thumb": "assets/wallpapers/mint-thumb.jpg",
-    "tone": "light",
-    "ut": {
-      "tr": "mist",
-      "br": "light"
-    },
-    "frostVeil": 0.44,
-    "listColumn": 3,
-    "dockQuiet": false,
-    "clockMist": false
-  },
-  {
     "id": "alpine",
     "name": "Alpine glow",
     "src": "assets/wallpapers/alpine.jpg",
